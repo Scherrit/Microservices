@@ -1,0 +1,82 @@
+#kubectl port-forward svc/fleetman-queue 30010:8161
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deploy
+  labels:
+    app: webapp
+    release: "0-5"
+spec:
+  minReadySeconds: 30
+  selector:
+    matchLabels:
+      app: webapp
+      release: "0-5"
+  template:
+    metadata:
+      labels:
+        app: webapp
+        release: "0-5"
+    spec:
+      containers:
+      - name: webapp
+        image: richardchesterwood/k8s-fleetman-webapp-angular:release0-5
+        # resources:
+        #   limits:
+        #     memory: "1280Mi"
+        #     cpu: "5000m"
+        ports:
+        - containerPort: 80
+
+# apiVersion: apps/v1
+# kind: ReplicaSet
+# metadata:
+#   name: webapp-rs
+#   labels:
+#     app: webapp
+#     release: "0-5"
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: webapp
+#       release: "0-5"
+#   template:
+#     metadata:
+#       name: myapp
+#       labels:
+#         app: webapp
+#         release: "0-5"
+#     spec:
+#       containers:
+#         - name: webapp
+#           image: richardchesterwood/k8s-fleetman-webapp-angular:release0-5
+#           ports:
+#             - containerPort: 80
+#           resources:
+#             limits:
+#               memory: "128Mi"
+#               cpu: "500m"
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: queue
+  labels:
+    app: queue
+    release: "1"
+spec:
+  containers:
+    - name: queue
+      image: richardchesterwood/k8s-fleetman-queue:release1
+      ports:
+        - containerPort: 80
+      # resources:
+      #   limits:
+      #       memory: "1280Mi"
+      #       cpu: "5000m"
+
+---
+
