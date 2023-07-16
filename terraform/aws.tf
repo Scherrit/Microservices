@@ -1,7 +1,5 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
-
 terraform {
+  required_version = "> 1.5.0"
 
   backend "remote" {
     organization = "Esckays"
